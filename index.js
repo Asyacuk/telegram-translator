@@ -82,3 +82,14 @@ bot.on('audio', async (ctx) => {
 
 
 bot.launch()
+
+
+//create a server object:
+http
+  .createServer(function (req, res) {
+    res.write("Hello World!"); //write a response
+    res.end(); //end the response
+  })
+  .listen(8000, function () {
+    console.log("server start at port 8000"); //the server object listens on port 3000
+  });
