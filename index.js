@@ -1,6 +1,5 @@
 const { Telegraf } = require("telegraf");
 const translator = require("translation-google");
-const config = require("./config.json");
 const http = require("http");
 const bot = new Telegraf("6142679038:AAF1fKh8PbeF87d--ImuFJPD58qnyqz0PGk");
 
