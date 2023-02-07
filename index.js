@@ -5,7 +5,7 @@ const bot = new Telegraf("6142679038:AAF1fKh8PbeF87d--ImuFJPD58qnyqz0PGk");
 
 bot.start((ctx) => {
   ctx.reply(
-    `<b>Merhaba @${ctx.from.username}, bana çevirmek istediğin bir metin gönder senin için türkçeye çevireyim.</b>`,
+    `<b>Merhaba @${ctx.from.username}, bana çevirmek istediğin bir metin gönder senin için türkçeye çevireyim.</b><p><p> Sürüm: Beta 0.4`,
     { parse_mode: "HTML" }
   );
 });
@@ -74,7 +74,6 @@ bot.on("audio", async (ctx) => {
     ctx.reply("Lütfen ses dosyasına metin ekleyiniz.");
   }
 });
-
 bot.launch();
 
 //create a server object:
