@@ -1,7 +1,7 @@
 const { Telegraf } = require("telegraf");
 const translator = require("translation-google");
 const http = require("http");
-const bot = new Telegraf("6142679038:AAF1fKh8PbeF87d--ImuFJPD58qnyqz0PGk");
+const bot = new Telegraf(process.env.TOKEN);
 
 bot.start((ctx) => {
   ctx.reply(
