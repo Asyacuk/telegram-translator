@@ -7,7 +7,7 @@ bot.start((ctx) => {
   ctx.reply(
     `<b>Merhaba @${ctx.from.username}, bana çevirmek istediğin bir metin gönder senin için türkçeye çevireyim.</b>
     
-    Sürüm: Beta 0.5`,
+    Sürüm: Beta 0.5 --- Sahip: @Asyacuk --- Kanalı: @Asyacukproject`,
     { parse_mode: "HTML" }
   );
 });
