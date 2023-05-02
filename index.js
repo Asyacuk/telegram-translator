@@ -1,5 +1,8 @@
 const { Telegraf } = require("telegraf");
 const translator = require("translation-google");
+const http = require("http");
+
+
 const bot = new Telegraf("6142679038:AAGhk5YxBlceuxSSMsZC-4hdCceTfPLwOAA");
 
 // Kullanıcının tercih ettiği dilin saklanacağı değişken
@@ -58,7 +61,7 @@ for (let i = 0; i < languages.length; i += 3) {
 
 // Bot başladığında kullanıcıya dil seçeneklerini gönder
 bot.start((ctx) => {
-  const message = "Merhaba, çeviri için bir dil seçin:";
+  const message = "Hello, choose a language for translation:";
   const keyboard = {
     reply_markup: {
       inline_keyboard: rows.map(row =>
@@ -201,3 +204,13 @@ bot.on("audio", async (ctx) => {
   });
 
 bot.launch();
+
+//create a server object:
+http
+  .createServer(function (req, res) {
+    res.write("Hello World!"); //write a response
+    res.end(); //end the response
+  })
+  .listen(8000, function () {
+    console.log("server start at port 8000"); //the server object listens on port 3000
+  });
