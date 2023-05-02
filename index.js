@@ -3,7 +3,7 @@ const translator = require("translation-google");
 const http = require("http");
 
 
-const bot = new Telegraf("6142679038:AAGhk5YxBlceuxSSMsZC-4hdCceTfPLwOAA");
+const bot = new Telegraf("6142679038:AAG04wov4jDHXwExFFhNkDJBqt4EtVJME94");
 
 // Kullanıcının tercih ettiği dilin saklanacağı değişken
 let selectedLanguage = "en"; // Varsayılan dil Türkçe olarak ayarlandı
@@ -79,8 +79,8 @@ bot.start((ctx) => {
 // Kullanıcı dil seçeneğine tıkladığında tetiklenecek olan fonksiyon
 bot.action(/.+/, async (ctx) => {
   selectedLanguage = ctx.match[0];
-  const message = `Seçilen dil: ${languages.find((language) => language[1] === selectedLanguage)[0]}`;
-  ctx.answerCbQuery(message);
+  const message = `selected language: ${languages.find((language) => language[1] === selectedLanguage)[0]}`;
+  ctx.answerCbQuery(message, {to: selectedLanguage});
 });
 
 // Kullanıcının gönderdiği metinleri seçilen dile çevirir
