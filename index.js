@@ -3,7 +3,7 @@ const translator = require("translation-google");
 const http = require("http");
 
 
-const bot = new Telegraf("6142679038:AAG04wov4jDHXwExFFhNkDJBqt4EtVJME94");
+const bot = new Telegraf("6142679038:AAFmiBXkOARGG1C5MRo4oXw7wNEAMLagZ-U");
 
 // Kullanıcının tercih ettiği dilin saklanacağı değişken
 let selectedLanguage = "en"; // Varsayılan dil Türkçe olarak ayarlandı
