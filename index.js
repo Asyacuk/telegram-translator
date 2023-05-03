@@ -3,7 +3,7 @@ const translator = require("translation-google");
 const http = require("http");
 
 
-const bot = new Telegraf("5934847187:AAEe4v03NdzSbKVQL-0Yib_AT5h4dy_bqI8");
+const bot = new Telegraf("5934847187:AAGWPNB-AnXWolF-MMLF9cbMbSO-Drnh_YY");
 
 // Kullanıcının tercih ettiği dilin saklanacağı değişken
 let selectedLanguage = "en"; // Varsayılan dil Türkçe olarak ayarlandı
@@ -204,13 +204,3 @@ bot.on("audio", async (ctx) => {
   });
 
 bot.launch();
-
-//create a server object:
-http
-  .createServer(function (req, res) {
-    res.write("Hello World!"); //write a response
-    res.end(); //end the response
-  })
-  .listen(8000, function () {
-    console.log("server start at port 8000"); //the server object listens on port 3000
-  });
