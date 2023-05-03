@@ -1,12 +1,11 @@
 const { Telegraf } = require("telegraf");
 const translator = require("translation-google");
 const http = require("http");
+const bot = new Telegraf(TOKEN="5934847187:AAGWPNB-AnXWolF-MMLF9cbMbSO-Drnh_YY");
 
-
-const bot = new Telegraf("5934847187:AAGWPNB-AnXWolF-MMLF9cbMbSO-Drnh_YY");
 
 // Kullanıcının tercih ettiği dilin saklanacağı değişken
-let selectedLanguage = "en"; // Varsayılan dil Türkçe olarak ayarlandı
+let selectedLanguage = "tr"; // Varsayılan dil Türkçe olarak ayarlandı
 
 // Diller ve bayraklar
 const languages = [
@@ -61,7 +60,7 @@ for (let i = 0; i < languages.length; i += 3) {
 
 // Bot başladığında kullanıcıya dil seçeneklerini gönder
 bot.start((ctx) => {
-  const message = "Hello, choose a language for translation:";
+  const message = "Hello @${ctx.from.username}, choose a language for translation:";
   const keyboard = {
     reply_markup: {
       inline_keyboard: rows.map(row =>
@@ -83,7 +82,6 @@ bot.action(/.+/, async (ctx) => {
   ctx.answerCbQuery(message, {to: selectedLanguage});
 });
 
-// Kullanıcının gönderdiği metinleri seçilen dile çevirir
 bot.on("text", async (ctx) => {
   const text = ctx.update.message.text;
   const translation = await translator(text, { to: selectedLanguage });
@@ -93,114 +91,72 @@ bot.on("text", async (ctx) => {
   });
 });
 
-// Kullanıcı resim gönderdiğinde tetiklenecek olan fonksiyon
 bot.on("photo", async (ctx) => {
   const text = ctx.update.message.caption;
   if (text) {
     const translation = await translator(text, { to: selectedLanguage });
-    const translatedCaption = `*${translation.text}*`; // Çevirisi yapılmış altyazıyı kalın yazıda göster
-
-    // Resmi yanıt olarak ver
-    ctx.replyWithPhoto(ctx.update.message.photo[0].fileid, {
-      caption: translatedCaption,
-      parsemode: "Markdown",
-      replytomessageid: ctx.update.message.messageid,
+    ctx.replyWithPhoto(ctx.update.message.photo[0].file_id, {
+      caption: `*${translation.text}*`,
+      parse_mode: "Markdown",
+      reply_to_message_id: ctx.update.message.message_id,
     });
   } else {
-    // Altyazı olmadan resim gönderildiğinde hata mesajı göster
-    const errorMessage = "Lütfen resim altına metin ekleyiniz.";
-
-    if (selectedLanguage !== 'en') {
-      // Hata mesajını kullanıcının seçtiği dile çevir
-      const { text } = await translator(errorMessage, { to: selectedLanguage} );
-      ctx.reply(text, { reply_to_message_id: ctx.update.message.message_id });
-    } else {
-      ctx.reply(errorMessage, { reply_to_message_id: ctx.update.message.message_id });
-    }
+    //ctx.reply("error");
   }
 });
 
-// Kullanıcı video gönderdiğinde tetiklenecek olan fonksiyon
 bot.on("video", async (ctx) => {
   const text = ctx.update.message.caption;
   if (text) {
     const translation = await translator(text, { to: selectedLanguage });
-    const translatedCaption = `*${translation.text}*`; // Çevirisi yapılmış altyazıyı kalın yazıda göster
-
-    // Videoyu yanıt olarak ver
     ctx.replyWithVideo(ctx.update.message.video.file_id, {
-      caption: translatedCaption,
+      caption: `*${translation.text}*`,
       parse_mode: "Markdown",
       reply_to_message_id: ctx.update.message.message_id,
     });
   } else {
-    // Altyazı olmadan video gönderildiğinde hata mesajı göster
-    const errorMessage = "Lütfen video altına metin ekleyiniz.";
-
-    if (selectedLanguage !== "en") {
-    // Hata mesajını kullanıcının seçtiği dile çevir
-      const { text } = await translator(errorMessage, { to: selectedLanguage });
-      ctx.reply(text, { reply_to_message_id: ctx.update.message.message_id });
-    } else {
-      ctx.reply(errorMessage, { reply_to_message_id: ctx.update.message.message_id });
-    }
+    //ctx.reply("");
   }
 });
 
-
-
-// Kullanıcı ses kaydı gönderdiğinde tetiklenecek olan fonksiyon
 bot.on("voice", async (ctx) => {
   const text = ctx.update.message.caption;
   if (text) {
     const translation = await translator(text, { to: selectedLanguage });
-    const translatedCaption = `*${translation.text}*`;
-
-    // Ses dosyasını yanıt olarak gönder
     ctx.replyWithVoice(ctx.update.message.voice.file_id, {
-      caption: translatedCaption,
+      caption: `*${translation.text}*`,
       parse_mode: "Markdown",
       reply_to_message_id: ctx.update.message.message_id,
     });
   } else {
-    const errorMessage = `Lütfen ses dosyasının altına metin ekleyiniz.`;
+   //ctx.reply("");
+  }
+});
 
-    if (selectedLanguage !== "en") {
-      // Hata mesajını kullanıcının seçtiği dile çevir
-        const { text } = await translator(errorMessage, { to: selectedLanguage });
-        ctx.reply(text, { reply_to_message_id: ctx.update.message.message_id });
-      } else {
-        ctx.reply(errorMessage, { reply_to_message_id: ctx.update.message.message_id });
-      }
-    }
-  });
-
-
-// Kullanıcı ses gönderdiğinde tetiklenecek olan fonksiyon
 bot.on("audio", async (ctx) => {
   const text = ctx.update.message.caption;
   if (text) {
     const translation = await translator(text, { to: selectedLanguage });
-    const translatedCaption = `*${translation.text}*`; // Çevirisi yapılmış altyazıyı kalın yazıda göster
-
-    // Sesi yanıt olarak ver
     ctx.replyWithAudio(ctx.update.message.audio.file_id, {
-      caption: translatedCaption,
+      caption: `*${translation.text}*`,
       parse_mode: "Markdown",
       reply_to_message_id: ctx.update.message.message_id,
     });
   } else {
-    // Altyazı olmadan ses dosyası gönderildiğinde hata mesajı göster
-    const errorMessage = `Lütfen ses dosyasına metin ekleyiniz.`;
-
-    if (selectedLanguage !== "en") {
-      // Hata mesajını kullanıcının seçtiği dile çevir
-        const { text } = await translator(errorMessage, { to: selectedLanguage });
-        ctx.reply(text, { reply_to_message_id: ctx.update.message.message_id });
-      } else {
-        ctx.reply(errorMessage, { reply_to_message_id: ctx.update.message.message_id });
-      }
-    }
-  });
+    //ctx.reply("");
+  }
+});
 
 bot.launch();
+
+
+
+//create a server object:
+http
+  .createServer(function (req, res) {
+    res.write("Hello World!"); //write a response
+    res.end(); //end the response
+  })
+  .listen(8000, function () {
+    console.log("server start at port 8000"); //the server object listens on port 3000
+  });
