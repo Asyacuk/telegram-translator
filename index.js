@@ -1,7 +1,8 @@
 const { Telegraf } = require("telegraf");
 const translator = require("translation-google");
 const http = require("http");
-const bot = new Telegraf(TOKEN="5934847187:AAGWPNB-AnXWolF-MMLF9cbMbSO-Drnh_YY");
+
+const bot = new Telegraf(TOKEN="6103244925:AAHn4GOKNQ_59lisTC0YJDzmfQhppCOU_qM");
 
 
 // Kullanıcının tercih ettiği dilin saklanacağı değişken
@@ -60,7 +61,7 @@ for (let i = 0; i < languages.length; i += 3) {
 
 // Bot başladığında kullanıcıya dil seçeneklerini gönder
 bot.start((ctx) => {
-  const message = "Hello @${ctx.from.username}, choose a language for translation:";
+  const message = "Hello ${ctx.from.first_name} ${ctx.from.last_name}, choose a language for translation:";
   const keyboard = {
     reply_markup: {
       inline_keyboard: rows.map(row =>
@@ -81,6 +82,84 @@ bot.action(/.+/, async (ctx) => {
   const message = `selected language: ${languages.find((language) => language[1] === selectedLanguage)[0]}`;
   ctx.answerCbQuery(message, {to: selectedLanguage});
 });
+
+
+// beta ve teta
+
+// Gelen mesajları tutmak için bir dizi oluşturuyoruz
+let messageQueue = [];
+
+// Botun gelen mesajları işlemesi için bir ön koşul ekleyelim
+bot.on('message', async (message) => {
+  // Mesajları aradaki süre ve mesaj sınırına göre ayıklıyoruz
+  messageQueue.push(message);
+  if (messageQueue.length > 15 || isMediaMessage(message)) {
+    await handleMessages();
+  }
+});
+
+// Mesajların çevrilip gönderilmesi için bir fonksiyon oluşturuyoruz
+async function handleMessages() {
+  // Diziyi 10 mesaj kadar dilimlere ayırıyoruz
+  let chunks = splitIntoChunks(messageQueue, 10);
+  messageQueue = [];
+
+  // Her bir dilim için mesajları çevirip gönderiyoruz
+  for (let chunk of chunks) {
+    let promises = [];
+    for (let message of chunk) {
+      promises.push(translateAndSend(message));
+    }
+    await Promise.all(promises);
+
+    // Her mesajdan sonra 10 saniye bekletiyoruz
+    await sleep(10000);
+  }
+}
+
+// Mesajların medya içeriği içerip içermediğini kontrol ediyoruz
+function isMediaMessage(message) {
+  return message.photo || message.video || message.voice || message.document;
+}
+
+// Mesajları 10 mesajlık dilimlere ayırıyoruz
+function splitIntoChunks(arr, chunkSize) {
+  let chunks = [];
+  for (let i = 0; i < arr.length; i += chunkSize) {
+    let chunk = arr.slice(i, i + chunkSize);
+    chunks.push(chunk);
+  }
+  return chunks;
+}
+
+// Bekletme işlemi için yardımcı bir fonksiyon oluşturuyoruz
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+
+// Mesajları çevirip gönderen fonksiyon
+async function translateAndSend(message) {
+  try {
+    // Gelen mesajın dilini algılıyoruz
+    let detectedLanguage = await detectLanguage(message.text);
+
+    // Eğer gelen mesaj dil İngilizce değilse, İngilizce'ye çeviriyoruz
+    let translatedText = message.text;
+    if (detectedLanguage !== 'en') {
+      translatedText = await translateText(message.text, detectedLanguage, 'en');
+    }
+
+    // Çevrilen mesajı veya orijinal mesajı gönderiyoruz
+    let response = `Original message from ${message.from.first_name}: ${message.text}\n\nTranslated message: ${translatedText}`;
+    await bot.telegram.sendMessage(chatId, response);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+// beta ve teta
 
 bot.on("text", async (ctx) => {
   const text = ctx.update.message.text;
