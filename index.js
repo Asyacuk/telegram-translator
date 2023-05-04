@@ -2,7 +2,7 @@ const { Telegraf } = require("telegraf");
 const translator = require("translation-google");
 const http = require("http");
 
-const bot = new Telegraf(TOKEN="6103244925:AAHn4GOKNQ_59lisTC0YJDzmfQhppCOU_qM");
+const bot = new Telegraf(TOKEN="5934847187:AAGWPNB-AnXWolF-MMLF9cbMbSO-Drnh_YY");
 
 
 // Kullanıcının tercih ettiği dilin saklanacağı değişken
@@ -61,7 +61,7 @@ for (let i = 0; i < languages.length; i += 3) {
 
 // Bot başladığında kullanıcıya dil seçeneklerini gönder
 bot.start((ctx) => {
-  const message = "Hello ${ctx.from.first_name} ${ctx.from.last_name}, choose a language for translation:";
+  const message = `Hello ${ctx.from.username || ctx.from.first_name + " " + ctx.from.last_name || "there"}, choose a language for translation:`;
   const keyboard = {
     reply_markup: {
       inline_keyboard: rows.map(row =>
