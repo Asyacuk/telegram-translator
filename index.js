@@ -2,7 +2,7 @@ const { Telegraf } = require("telegraf");
 const translator = require("translation-google");
 const http = require("http");
 
-const bot = new Telegraf(TOKEN="6078319534:AAGkdsv1SbpYpqA0c6OevZRSTlnNciN7j_g");
+const bot = new Telegraf(TOKEN="");
 
 
 // Kullanıcının tercih ettiği dilin saklanacağı değişken
